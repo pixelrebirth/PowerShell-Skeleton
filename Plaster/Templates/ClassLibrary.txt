@@ -1,0 +1,8 @@
+class ClassName {
+    $PropertyOne
+    $PropertyTwo
+
+    ClassName ($InputVariable) {
+        $this.PropertyOne = $InputVariable
+    }
+}

@@ -1,0 +1,16 @@
+function New-Cmdlet {
+    [CmdletBinding(SupportsShouldProcess=$true)]
+    [OutputType([string])]
+    #Requires -Version 5
+    param (
+    )
+    
+    begin {
+    }
+    
+    process {
+    }
+    
+    end {
+    }
+}

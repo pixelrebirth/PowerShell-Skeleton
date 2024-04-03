@@ -1,0 +1,30 @@
+enum Ensure {
+    Absent
+    Present
+}
+
+[DscResource()]
+Class SpecificClassName {
+
+    [DSCProperty(Key)]
+    [string]$SomeVariable
+
+    [DSCProperty(Mandatory)]
+    [string]$SomeOtherVariable
+
+    [DscProperty(Mandatory)]
+    [Ensure]$Ensure
+
+    # This is for the Get-DscResource cmdlet, should return $this
+    [SpecificClassName] Get() {
+    }
+
+    # This is the idempotent check to see if the Set needs to be run
+    [bool] Test() {
+    }
+
+    # This is what will Set if the Test is False
+    [void] Set() {
+    }
+
+}
