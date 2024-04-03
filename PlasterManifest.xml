@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<plasterManifest
+  schemaVersion="1.1"
+  templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
+  <metadata>
+    <name>OrgNamePlasterBase</name>
+    <id>104b04f5-2856-42bf-9037-e382ff573201</id>
+    <version>1.0.0</version>
+    <title>OrgName Plaster Base Template</title>
+    <description>This is a general template with a series of questions to define a module project, dsc project or infrastructure test project</description>
+    <author>Kelcey Vehanen</author>
+    <tags></tags>
+  </metadata>
+  <parameters>
+    <parameter name="DscOrPwshModule" type="choice" prompt="Is this a Powershell or DSC Module" default="0">
+      <choice label="&amp;Powershell Module" help="Defines the skeleton as a Powershell Module" value="pwsh" />
+      <choice label="&amp;DSC Module" help="Defines the skeleton as a DSC Module" value="dsc" />
+    </parameter>
+    <parameter name="ModuleName" type="text" prompt="Name of your module" />
+    <parameter name="ModuleDesc" type="text" prompt="Brief description on this module" />
+    <parameter name="ModuleAuthor" type="text" prompt="Author" default='$env:UserName'/>
+    <parameter name="ModuleVersion" type="text" prompt="Version number"  default='0.0.1' />
+  </parameters>
+  <content>
+    <!-- 
+    <file source='' destination='Docs'/>>
+    <file source='' destination='Configs'/>>-->
+    <message>Deploying Common Files</message>
+    <file source='Plaster\Files\PSScriptAnalyzerSettings.psd1' destination='Configs\PSScriptAnalyzerSettings.psd1'/>
+    <file source='Plaster\Files\Install-OrgNameModule.ps1' destination='Install-OrgNameModule.ps1'/>
+    <file source='Plaster\Files\ModuleScript.psm1' destination='${PLASTER_PARAM_ModuleName}.psm1'/>
+    <file source='Plaster\Files\PsakeBuild.ps1' destination='PSakeBuild.ps1'/>
+    <file source='Plaster\Files\RunPester.ps1' destination='RunPester.ps1'/>
+    <file source='Plaster\Files\README.md' destination='README.md'/>
+    
+    <file source='Plaster\Files\settings.json' destination='.vscode\settings.json'/>
+    <file source='Plaster\Files\tasks.json' destination='.vscode\tasks.json'/>
+    
+    <file condition='$PLASTER_PARAM_DscOrPwshModule -contains "dsc"' source='Plaster\Templates\DscResource.txt' destination='Templates\DscResource.txt'/>
+    <file condition='$PLASTER_PARAM_DscOrPwshModule -contains "dsc"' source='Plaster\Files\GenerateDscPsm.ps1' destination='GenerateDscPsm.ps1'/>
+    <file condition='$PLASTER_PARAM_DscOrPwshModule -contains "dsc"' source='Plaster\Samples\DscResources\SampleFileCheck.ps1' destination='DscResources\SampleFileCheck.ps1'/>
+    <file condition='$PLASTER_PARAM_DscOrPwshModule -contains "dsc"' source='Plaster\Samples\DscResources\tests\SampleFileCheck.tests.ps1' destination='DscResources\tests\SampleFileCheck.tests.ps1'/>
+    <templateFile condition='$PLASTER_PARAM_DscOrPwshModule -contains "dsc"' source='Plaster\Files\DscLocalTest.ps1' destination='DscLocalTest.ps1'/>
+
+    <file condition='$PLASTER_PARAM_DscOrPwshModule -contains "pwsh"' source='Plaster\Templates\ClassLibrary.txt' destination='Templates\ClassLibrary.txt'/>
+    <file condition='$PLASTER_PARAM_DscOrPwshModule -contains "pwsh"' source='Plaster\Templates\New-Cmdlet.txt' destination='Templates\New-Cmdlet.txt'/>
+    <file condition='$PLASTER_PARAM_DscOrPwshModule -contains "pwsh"' source='Plaster\Samples\Private\Get-InternalCallSample.ps1' destination='Private\Get-InternalCallSample.ps1'/>
+    <file condition='$PLASTER_PARAM_DscOrPwshModule -contains "pwsh"' source='Plaster\Samples\Private\tests\Get-InternalCallSample.tests.ps1' destination='Private\tests\Get-InternalCallSample.tests.ps1'/>
+    <file condition='$PLASTER_PARAM_DscOrPwshModule -contains "pwsh"' source='Plaster\Samples\Public\New-CmdletSample.ps1' destination='Public\New-CmdletSample.ps1'/>
+    <file condition='$PLASTER_PARAM_DscOrPwshModule -contains "pwsh"' source='Plaster\Samples\Public\tests\New-CmdletSample.tests.ps1' destination='Public\tests\New-CmdletSample.tests.ps1'/>
+    <file condition='$PLASTER_PARAM_DscOrPwshModule -contains "pwsh"' source='Plaster\Samples\Classes\ClassLibrarySample.ps1' destination='Classes\ClassLibrarySample.ps1'/>
+    <file condition='$PLASTER_PARAM_DscOrPwshModule -contains "pwsh"' source='Plaster\Samples\Classes\tests\ClassLibrarySample.tests.ps1' destination='Classes\tests\ClassLibrarySample.tests.ps1'/>
+    
+    <message>Creating Module Manifest</message>
+    <newModuleManifest destination='${PLASTER_PARAM_ModuleName}.psd1'
+      moduleVersion='$PLASTER_PARAM_ModuleVersion'
+      rootModule='${PLASTER_PARAM_ModuleName}.psm1'
+      author='$PLASTER_PARAM_ModuleAuthor'
+      description='$PLASTER_PARAM_ModuleDesc'/>
+  </content>
+</plasterManifest>
