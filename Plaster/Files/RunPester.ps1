@@ -92,7 +92,7 @@ If ($DscModuleTest -eq $false){
         $ErrorMessage = $error[0].exception.message
 
         if ($ErrorMessage -match "Import-Module"){
-            $LineNumber = Get-Content -Path $CurrentModule | where {$_ -match "FunctionsToExport"}
+            $LineNumber = Get-Content -Path $CurrentModule | Where-Object {$_ -match "FunctionsToExport"}
             Write-Output "$CurrentModule;$LineNumber;Must have one or more cmdlets in FunctionsToExport"
         }
         
@@ -103,7 +103,7 @@ If ($DscModuleTest -eq $false){
     Update-MarkdownHelp -Path $DocsPath | Out-Null
 
     foreach ($MarkdownDoc in $(Get-ChildItem -Path $DocsPath)){
-        $MissingDocumentation = Get-Content -Path $MarkdownDoc.FullName | where {$_ -match "\{|\}"}
+        $MissingDocumentation = Get-Content -Path $MarkdownDoc.FullName | Where-Object {$_ -match "\{|\}"}
         foreach ($MissingLine in $MissingDocumentation){
             $LineNumber = $MissingLine.ReadCount
             Write-Output "$DocsPath\$($MarkdownDoc.Name);$LineNumber;Missing Documentation"
