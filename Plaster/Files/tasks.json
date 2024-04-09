@@ -6,25 +6,25 @@
 // ${fileExtname}: the current opened file's extension
 // ${cwd}: the current working directory of the spawned process
 {
-	"version": "0.1.0",
+	"version": "2.0.0",
 	"command": "powershell",
-	"isShellCommand": true,
-	"showOutput": "silent",
-	"suppressTaskName": false,
+	"windows": {
+		"command": "powershell.exe"
+	},
 	"tasks": [
 		{
-			"taskName": "TestFile",
+			"label": "TestFile",
+			"type": "shell",
 			"command": "Powershell",
 			"args": [
-				// weird as it seems, we're passing these as separate params as otherwise
-				// VSCode will put them in quotes and then PowerShell no longer recognises
-				// them as switches!
-				"-ExecutionPolicy", "RemoteSigned",
-				"-Command", "\" & '${workspaceRoot}\\RunPester.ps1' -FileName ${relativeFile}\""
+				"-ExecutionPolicy",
+				"RemoteSigned",
+				"-Command",
+				"\"'${workspaceRoot}\\RunPester.ps1' -FileName '${workspaceRoot}\\${relativeFile}'\""
 			],
 			"problemMatcher": {
 				"owner": "pester",
-                "severity": "error",
+				"severity": "error",
 				"pattern": {
 					"regexp": "(.*);(.*);(.*)",
 					"file": 1,
@@ -34,18 +34,18 @@
 			}
 		},
 		{
-			"taskName": "TestAll",
+			"label": "TestAll",
+			"type": "shell",
 			"command": "Powershell",
 			"args": [
-				// weird as it seems, we're passing these as separate params as otherwise
-				// VSCode will put them in quotes and then PowerShell no longer recognises
-				// them as switches!
-				"-ExecutionPolicy", "RemoteSigned",
-				"-Command", "\"& '${workspaceRoot}\\RunPester.ps1'\""
+				"-ExecutionPolicy",
+				"RemoteSigned",
+				"-Command",
+				"\"'${workspaceRoot}\\RunPester.ps1'\""
 			],
 			"problemMatcher": {
 				"owner": "pester",
-                "severity": "error",
+				"severity": "error",
 				"pattern": {
 					"regexp": "(.*);(.*);(.*)",
 					"file": 1,
@@ -55,12 +55,21 @@
 			}
 		},
 		{
-			"taskName": "Package",
-			"isBuildCommand": true,
+			"label": "Package",
+			"type": "shell",
+			"command": "powershell",
 			"args": [
-				"-ExecutionPolicy", "RemoteSigned",
-				"-Command", "${workspaceRoot}\\BuildPackage.ps1"
-			]
+				"Package",
+				"-ExecutionPolicy",
+				"RemoteSigned",
+				"-Command",
+				"${workspaceRoot}\\BuildPackage.ps1"
+			],
+			"problemMatcher": [],
+			"group": {
+				"_id": "build",
+				"isDefault": false
+			}
 		}
 	]
 }
